@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <?php include 'includes/head.php'; ?>
+        <script src="assets/js/home.js" defer></script>
+    </head>
+
+    <body class="font-nunito flex flex-col items-center">
+        <!-- below div to make everything center in xl screens -->
+        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+            <?php include 'includes/navbar.php'; ?>
+
+            <!-- hero section background image and welcome text -->
+            <main class="flex h-96 flex-col justify-center gap-2 bg-[url(../../assets/images/main.jpg)] bg-cover bg-right lg:bg-top">
+                <!-- <main class="flex h-96 flex-col justify-center gap-2 bg-[url(assets/images/main.jpg)] bg-cover bg-right lg:bg-top"> -->
+                <h1 class="font-poppins ml-4 text-3xl font-bold text-white md:text-4xl lg:ml-8 lg:text-5xl">Welcome to PetMatch</h1>
+                <p class="ml-4 text-sm text-white lg:ml-8 lg:text-base">Purr-fect matches are just a click away!</p>
+                <a class="ml-4 w-fit rounded-sm bg-green-500 px-6 py-3 text-sm lg:ml-8" href="findapet">Find out who needs a home</a>
+            </main>
+
+            <!-- Adoption process section -->
+            <section>
+                <div class="mx-4 mt-8 flex flex-col gap-4 lg:ml-8">
+                    <h1 class="font-poppins text-center text-2xl font-bold md:text-3xl">Adoption Process</h1>
+                    <p class="text-justify">Please visit our Animal Rehoming Centres during opening hours to meet our animals available for adoption, no appointment is required. For selected animals, we will require an email address and phone no.</p>
+
+                    <p class="text-justify">This website is live and updates frequently to check if an animal is available for adoption, please check their adoption profile. If you can still view the animal you are interested in and it hasn’t been marked as ‘adopted’, the animal is still at Rehoming Centre.</p>
+
+                    <p class="text-justify">Please be aware there is a chance that by the time you arrive at our location, the animal you have an interest in might have been adopted, or another party might be going through the adoption process.</p>
+
+                    <a class="w-fit rounded-sm bg-green-500 px-8 py-3" href="resources">More Info</a>
+                </div>
+            </section>
+
+            <!-- Pets looking for a home section -->
+            <section>
+                <div class="mx-4 my-8 lg:ml-8">
+                    <h1 class="font-poppins mb-4 text-center text-2xl font-bold md:text-3xl">Pets Looking for a Home</h1>
+                    <div id="pets" class="grid auto-cols-max gap-4" style="grid-template-columns: repeat(auto-fit, minmax(270px, 1fr))">
+                        <div class="card-shadow w-full max-w-4xl overflow-hidden rounded-3xl">
+                            <div>
+                                <img class="w-full" src="assets/images/pets/1.jpg" alt="" />
+                            </div>
+
+                            <div class="mx-4 my-4 flex flex-col gap-2">
+                                <p class="text-2xl font-bold">Ohana</p>
+                                <p class="text-neutral-600">German Shepherd</p>
+                                <p class="text-neutral-600">Adult ● Female ● Large</p>
+                            </div>
+                        </div>
+
+                        <div class="card-shadow w-full max-w-4xl overflow-hidden rounded-3xl">
+                            <div>
+                                <img class="w-full" src="assets/images/pets/1.jpg" alt="" />
+                            </div>
+
+                            <div class="mx-4 my-4 flex flex-col gap-2">
+                                <p class="text-2xl font-bold">Ohana</p>
+                                <p class="text-neutral-600">German Shepherd</p>
+                                <p class="text-neutral-600">Adult ● Female ● Large</p>
+                            </div>
+                        </div>
+
+                        <div class="card-shadow w-full max-w-4xl overflow-hidden rounded-3xl">
+                            <div>
+                                <img class="w-full" src="assets/images/pets/1.jpg" alt="" />
+                            </div>
+
+                            <div class="mx-4 my-4 flex flex-col gap-2">
+                                <p class="text-2xl font-bold">Ohana</p>
+                                <p class="text-neutral-600">German Shepherd</p>
+                                <p class="text-neutral-600">Adult ● Female ● Large</p>
+                            </div>
+                        </div>
+
+                        <div class="card-shadow w-full max-w-4xl overflow-hidden rounded-3xl">
+                            <div>
+                                <img class="w-full" src="assets/images/pets/1.jpg" alt="" />
+                            </div>
+
+                            <div class="mx-4 my-4 flex flex-col gap-2">
+                                <p class="text-2xl font-bold">Ohana</p>
+                                <p class="text-neutral-600">German Shepherd</p>
+                                <p class="text-neutral-600">Adult ● Female ● Large</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <?php include 'includes/head.php'; ?>
+        <title>Admin Login</title>
+    </head>
+    <body class="font-nunito flex flex-col items-center">
+        <div class="flex h-screen w-full justify-center overflow-clip bg-neutral-100 md:items-center 2xl:max-w-[1536px]">
+            <div class="card-shadow relative mt-16 h-fit w-96 p-8 md:mt-0">
+                <h1 class="font-poppins mb-8 text-center text-3xl font-black">Admin Login</h1>
+                <form action="adminverify" method="post">
+                    <div class="flex flex-col gap-4">
+                        <input class="border border-black p-2 outline-none" type="text" placeholder="Enter your username" name="username" required />
+                        <input class="border border-black p-2 outline-none" type="password" placeholder="Enter your password" name="password" required />
+                        <input class="m-auto w-fit rounded-sm bg-green-500 px-8 py-3" type="submit" value="Submit" name="submit" />
+                    </div>
+                </form>
+
+                <div class="absolute -top-16 left-1/2 -translate-x-1/2 transform"></div>
+            </div>
+        </div>
+    </body>
+</html>

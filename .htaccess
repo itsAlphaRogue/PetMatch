@@ -1,0 +1,19 @@
+#RewriteEngine On
+#RewriteBase /petmatch/
+
+# Redirect requests to index.php while keeping clean URLs
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.+)$ index.php?route=$1 [QSA,L]
+
+
+
+RewriteEngine On
+
+# Redirect requests to index.php while keeping clean URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?route=$1 [QSA,L]
+
+# For woff2 font
+AddType font/woff2 .woff2

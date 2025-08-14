@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "nunito";
+    src: url(../fonts/nunito.woff2) format(woff2);
+}
+
+@font-face {
+    font-family: "poppins";
+    src: url(../fonts/poppins.woff2) format(woff2);
+}
+
+@layer components
+{
+    .card-shadow
+    {
+        box-shadow: 4px 4px 4px 0px #bfbfbf;
+        border: 1px solid #0000000a;
+    }
+}
+
+.font-nunito
+{
+    font-family: 'nunito';
+}
+
+.font-poppins
+{
+    font-family: 'poppins';
+}

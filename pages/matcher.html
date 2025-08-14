@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <?php include 'includes/head.php'; ?>
+        <script src="assets/js/home.js" defer></script>
+        <script src="assets/js/matcher.js" defer></script>
+    </head>
+
+    <body class="font-nunito flex flex-col items-center">
+        <!-- below div to make everything center in xl screens -->
+        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+            <?php include 'includes/navbar.php'; ?>
+
+            <div class="my-8">
+                <h1 class="font-poppins text-center text-2xl font-black">Find best breed for you</h1>
+                <p class="text-center">Answer few questions about yourself and we will suggest which breed is best for you</p>
+            </div>
+
+            <div class="mx-8 flex flex-col md:mx-24">
+                <!-- All questions is in this form -->
+                <form onsubmit="matcher(event)">
+                    <section class="flex flex-col gap-12">
+                        <!-- Living Space -->
+                        <div class="question">
+                            <h1 class="font-bold">What best describes your living space?</h1>
+                            <div>
+                                <input type="radio" name="living-space" value="1" id="living-space-apartment" />
+                                <label for="living-space-apartment">Apartment</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="living-space" value="2" id="living-space-house" />
+                                <label for="living-space-house">House</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="living-space" value="3" id="living-space-farm" />
+                                <label for="living-space-farm">Farm</label>
+                            </div>
+                            <p class="text-neutral-400 italic">A large dog needs space, small dogs fit in apartments.</p>
+                        </div>
+                        <!-- Activity Level -->
+                        <div class="question">
+                            <h1 class="font-bold">How active is your lifestyle?</h1>
+                            <div>
+                                <input type="radio" name="activity-level" value="1" id="activity-sedentary" />
+                                <label for="activity-sedentary">Sedentary (mostly indoors)</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="activity-level" value="2" id="activity-moderate" />
+                                <label for="activity-moderate">Moderately active</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="activity-level" value="3" id="activity-active" />
+                                <label for="activity-active">Very active (outdoors often)</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Some dogs are more energetic and active.</p>
+                        </div>
+                        <!-- Grooming Time -->
+                        <div class="question">
+                            <h1 class="font-bold">How much time can you spend on grooming?</h1>
+                            <div>
+                                <input type="radio" name="grooming-time" value="1" id="grooming-low" />
+                                <label for="grooming-low">Little time (≤30 mins/week)</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="grooming-time" value="2" id="grooming-moderate" />
+                                <label for="grooming-moderate">Moderate time (1-2 hrs/week)</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="grooming-time" value="3" id="grooming-high" />
+                                <label for="grooming-high">Plenty of time (>2 hrs/week)</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Long-haired breeds require regular brushing.</p>
+                        </div>
+                        <!-- Experience -->
+                        <div class="question">
+                            <h1 class="font-bold">What's your experience with dogs?</h1>
+                            <div>
+                                <input type="radio" name="experience" value="1" id="experience-beginner" />
+                                <label for="experience-beginner">First-time owner</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="experience" value="2" id="experience-intermediate" />
+                                <label for="experience-intermediate">Some experience</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="experience" value="3" id="experience-expert" />
+                                <label for="experience-expert">Experienced owner</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Some breeds require more training knowledge.</p>
+                        </div>
+                        <!-- Children -->
+                        <div class="question">
+                            <h1 class="font-bold">Do you have children or plan to?</h1>
+                            <div>
+                                <input type="radio" name="children" value="1" id="children-no" />
+                                <label for="children-no">No children</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="children" value="2" id="children-visit" />
+                                <label for="children-visit">Children visit occasionally</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="children" value="3" id="children-yes" />
+                                <label for="children-yes">Live with children</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Some breeds are more patient with kids.</p>
+                        </div>
+                        <!-- Budget -->
+                        <div class="question">
+                            <h1 class="font-bold">What's your estimated monthly budget for a dog?</h1>
+                            <div>
+                                <input type="radio" name="budget" value="1" id="budget-low" />
+                                <label for="budget-low">Low ($50-$100)</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="budget" value="2" id="budget-medium" />
+                                <label for="budget-medium">Medium ($100-$200)</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="budget" value="3" id="budget-high" />
+                                <label for="budget-high">High ($200+)</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Some breeds have high vet costs.</p>
+                        </div>
+                        <input class="h-12 w-40 cursor-pointer rounded-sm bg-green-500 px-8 py-3 transition-colors hover:bg-green-300 active:bg-green-600" type="submit" value="Submit" />
+                    </section>
+                </form>
+
+                <!-- To show breed after ajax request -->
+                <div id="answer" class="fmx-8 lex flex-col items-center justify-center lg:fixed lg:top-1/3 lg:right-24 lg:mx-0"></div>
+            </div>
+        </div>
+    </body>
+</html>

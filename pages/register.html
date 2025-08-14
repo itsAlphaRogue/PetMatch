@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <?php include 'includes/head.php'; ?>
+    </head>
+
+    <body class="font-nunito flex flex-col items-center">
+        <!-- below div to make everything center in xl screens -->
+        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+            <?php include 'includes/navbar.php'; ?>
+            <div class="relative flex h-auto items-center justify-center">
+                <div class="card-shadow my-8 h-fit w-96 p-8">
+                    <h1 class="font-poppins mb-8 text-center text-3xl font-black">Register</h1>
+                    <form id="registerform" onsubmit="registerAJAX(event)">
+                        <div class="flex flex-col gap-4">
+                            <input class="border border-black p-2 outline-none" type="text" placeholder="Enter your name" required name="name" />
+                            <input class="border border-black p-2 outline-none" type="email" placeholder="Enter your email" required name="email" />
+                            <input class="border border-black p-2 outline-none" type="password" placeholder="Enter your password" required name="password1" />
+                            <input class="border border-black p-2 outline-none" type="password" placeholder="repeat password" required name="password2" />
+                            <input class="border border-black p-2 outline-none" type="number" placeholder="Enter your phone no" required name="phone" />
+                            <input class="m-auto h-12 w-40 cursor-pointer rounded-sm bg-green-500 px-8 py-3 text-center transition-colors hover:bg-green-300 active:bg-green-600" id="submit" type="submit" value="Submit" />
+                        </div>
+                    </form>
+                </div>
+
+                <div id="message" class="absolute top-0 hidden rounded-md bg-red-500 px-4 py-2"></div>
+            </div>
+        </div>
+    </body>
+</html>

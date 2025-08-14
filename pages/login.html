@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <?php include 'includes/head.php'; ?>
+    </head>
+
+    <body class="font-nunito flex flex-col items-center">
+        <!-- below div to make everything center in xl screens -->
+        <div class="h-screen w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+            <?php include 'includes/navbar.php'; ?>
+            <div class="flex items-center justify-center">
+                <div class="card-shadow relative my-16 h-fit w-96 p-8">
+                    <h1 class="font-poppins mb-8 text-center text-3xl font-black">Login</h1>
+                    <form id="loginform" onsubmit="loginAJAX(event)">
+                        <div class="flex flex-col gap-4">
+                            <input class="border border-black p-2 outline-none" type="email" placeholder="Enter your email" name="email" required />
+                            <input class="border border-black p-2 outline-none" type="password" placeholder="Enter your password" name="password" required />
+                            <input id="submit" class="m-auto w-fit rounded-sm bg-green-500 px-8 py-3 transition-colors hover:bg-green-300 active:bg-green-600" type="submit" value="Submit" name="submit" />
+                        </div>
+                    </form>
+                </div>
+
+                <div id="message" class="absolute top-24 hidden rounded-md bg-red-500 px-4 py-2"></div>
+            </div>
+        </div>
+    </body>
+</html>

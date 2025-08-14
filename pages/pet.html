@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <?php include 'includes/head.php'; ?>
+        <script src="assets/js/pet.js" defer></script>
+    </head>
+
+    <body class="font-nunito flex flex-col items-center">
+        <!-- below div to make everything center in xl screens -->
+        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+            <?php include 'includes/navbar.php'; ?>
+
+            <!-- Main pet display card -->
+            <section id="pet" class="card-shadow mx-4 mt-10 mb-8 overflow-hidden rounded-3xl lg:flex lg:h-[425px] lg:justify-between lg:gap-8">
+                <!-- displaying pet info with pet.php and pet.js -->
+            </section>
+            <!-- Main pet display card ends -->
+
+            <div class="mx-4 flex flex-col justify-between gap-4 md:flex-row">
+                <!-- before adopting a pet -->
+                <section class="mt-8 md:w-1/2 lg:w-3/4">
+                    <h1 class="font-poppins text-2xl font-bold md:text-3xl">Before Adopting a Pet</h1>
+                    <p class="mt-4 text-justify">Adopting a pet is a lifelong commitment filled with love, joy, and responsibility. Every pet has unique needs, from exercise and diet to training and healthcare. Before bringing one home, research the breed or species to ensure it fits your lifestyle, space, and time availability. Consider factors like temperament, energy levels, and potential medical needs. A well-informed decision will not only make your pet’s life better but also ensure a happy, lasting bond. Adopt wisely 🐾</p>
+                </section>
+                <!-- before adopting a pet ends -->
+
+                <!-- contact section -->
+                <section class="card-shadow mt-8 flex flex-col items-center justify-center gap-4 rounded-3xl md:w-1/2">
+                    <div class="mt-8 flex flex-col items-center justify-center">
+                        <img src="assets/images/logo.svg" alt="" />
+                        <p class="font-poppins font-bold">PetMatch</p>
+                        <p>Lalitpur,Lubhoo</p>
+                    </div>
+                    <div class="font-poppins relative flex items-center text-2xl font-black">
+                        <svg class="absolute right-40 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" /></svg>
+                        <p class="ml-2">01-5580242</p>
+                    </div>
+                    <div class="mx-4 mb-8 text-center">Please pay us a visit on opening hours to meet our pets and adopt</div>
+                </section>
+                <!-- contact section ends -->
+            </div>
+
+            <!-- more pets section -->
+            <section class="m-auto mb-4 xl:w-full">
+                <h1 class="font-poppins my-8 text-center text-2xl font-bold">More Pets Looking for a Home</h1>
+                <div id="pets" class="mx-4 grid auto-cols-max gap-4" style="grid-template-columns: repeat(auto-fit, minmax(270px, 1fr))">
+                    <!-- displaying pets from pet.php and pet.js -->
+                </div>
+            </section>
+            <!-- more pets section ends -->
+        </div>
+    </body>
+</html>
