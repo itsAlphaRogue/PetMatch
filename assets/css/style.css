@@ -295,6 +295,9 @@
   .m-8 {
     margin: calc(var(--spacing) * 8);
   }
+  .m-9 {
+    margin: calc(var(--spacing) * 9);
+  }
   .m-auto {
     margin: auto;
   }
