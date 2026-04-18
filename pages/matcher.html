@@ -16,7 +16,7 @@
                 <p class="text-center">Answer few questions about yourself and we will suggest which breed is best for you</p>
             </div>
 
-            <div class="mx-8 flex flex-col md:mx-24">
+            <div class="mx-8 flex flex-col justify-between md:mx-24 lg:flex-row">
                 <!-- All questions is in this form -->
                 <form onsubmit="matcher(event)">
                     <section class="flex flex-col gap-12">
@@ -122,12 +122,84 @@
                             </div>
                             <p class="text-neutral-400 italic">Some breeds have high vet costs.</p>
                         </div>
+                        <!-- Shedding Tolerance -->
+                        <div class="question">
+                            <h1 class="font-bold">How do you feel about dog hair around your home?</h1>
+                            <div>
+                                <input type="radio" name="shedding" value="1" id="shedding-none" />
+                                <label for="shedding-none">I prefer little to no shedding (allergies or cleanliness)</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="shedding" value="2" id="shedding-some" />
+                                <label for="shedding-some">Some hair is fine, I don't mind regular vacuuming</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="shedding" value="3" id="shedding-lots" />
+                                <label for="shedding-lots">Heavy shedding is no problem at all</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Double-coated breeds like Huskies and Collies shed heavily year-round.</p>
+                        </div>
+
+                        <!-- Noise Tolerance -->
+                        <div class="question">
+                            <h1 class="font-bold">How important is a quiet dog to you?</h1>
+                            <div>
+                                <input type="radio" name="noise" value="1" id="noise-quiet" />
+                                <label for="noise-quiet">Very important — I live in an apartment or have close neighbours</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="noise" value="2" id="noise-moderate" />
+                                <label for="noise-moderate">Some barking is okay, but not excessive</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="noise" value="3" id="noise-any" />
+                                <label for="noise-any">I don't mind a vocal dog</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Beagles, Huskies, and terriers tend to be very vocal breeds.</p>
+                        </div>
+
+                        <!-- Other Pets -->
+                        <div class="question">
+                            <h1 class="font-bold">Do you have other pets at home?</h1>
+                            <div>
+                                <input type="radio" name="other-pets" value="1" id="pets-none" />
+                                <label for="pets-none">No other pets</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="other-pets" value="2" id="pets-dogs" />
+                                <label for="pets-dogs">Yes — other dogs only</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="other-pets" value="3" id="pets-cats" />
+                                <label for="pets-cats">Yes — cats or small animals</label>
+                            </div>
+                            <p class="text-neutral-400 italic">High prey-drive breeds like Huskies and Cattle Dogs can be dangerous around cats.</p>
+                        </div>
+
+                        <!-- Alone Time -->
+                        <div class="question">
+                            <h1 class="font-bold">How many hours a day would the dog typically be home alone?</h1>
+                            <div>
+                                <input type="radio" name="alone-time" value="1" id="alone-rarely" />
+                                <label for="alone-rarely">Rarely alone — someone is home most of the day</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="alone-time" value="2" id="alone-moderate" />
+                                <label for="alone-moderate">3–5 hours alone on a typical day</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="alone-time" value="3" id="alone-often" />
+                                <label for="alone-often">Often alone — 6+ hours on weekdays</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Vizslas, Border Collies, and Aussie Shepherds suffer badly when left alone for long periods.</p>
+                        </div>
                         <input class="h-12 w-40 cursor-pointer rounded-sm bg-green-500 px-8 py-3 transition-colors hover:bg-green-300 active:bg-green-600" type="submit" value="Submit" />
                     </section>
                 </form>
 
                 <!-- To show breed after ajax request -->
-                <div id="answer" class="fmx-8 lex flex-col items-center justify-center lg:fixed lg:top-1/3 lg:right-24 lg:mx-0"></div>
+                <!-- <div id="answer" class="mx-8 flex max-w-96 flex-col items-center justify-center lg:fixed lg:right-24 lg:mx-0"></div> -->
+                <div id="answer" class="max-w-lg"></div>
             </div>
         </div>
     </body>

@@ -2,7 +2,7 @@
 
 $hostname = "localhost";
 $username = "root";
-$password = "";
+$password = "itsme";
 $db = "petmatch";
 
-$con = mysqli_connect("localhost","root","",$db);
+$con = mysqli_connect("localhost","root",$password,$db);
