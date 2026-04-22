@@ -18,6 +18,22 @@ function getPet()
     });
 }getPet();
 
+// Silently logs this pet page view for the trending algorithm.
+function logView()
+{
+    const params = new URLSearchParams(window.location.search);
+    const petid = params.get('id');
+    if (!petid) return;
+ 
+    fetch("scripts/logview.php", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: petid })
+    }).catch(() => {});  // swallow network errors silently
+}logView();
+ 
 
 
 function displayPets()

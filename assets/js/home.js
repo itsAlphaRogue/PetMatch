@@ -1,16 +1,10 @@
-// display 5 pets at home page
-function displayPetsHome()
+// Fetches and renders trending pets into #trending-pets on home page
+function displayTrendingPets()
 {
-    fetch("scripts/displaypets.php",{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ limit: 4 })
-    })
+    fetch("scripts/trending.php")
     .then(Response => Response.text())
-    .then(data =>{
-        const div = document.getElementById("pets");
+    .then(data => {
+        const div = document.getElementById("trending-pets");
         div.innerHTML = data;
     });
-}displayPetsHome();
+}displayTrendingPets();
