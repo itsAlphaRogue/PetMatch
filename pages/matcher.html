@@ -24,36 +24,54 @@
                         <div class="question">
                             <h1 class="font-bold">What best describes your living space?</h1>
                             <div>
-                                <input type="radio" name="living-space" value="1" id="living-space-apartment" />
-                                <label for="living-space-apartment">Apartment</label>
+                                <input type="radio" name="living-space" value="1" id="living-space-studio" />
+                                <label for="living-space-studio">Small apartment or studio — very limited space</label>
                             </div>
                             <div>
-                                <input type="radio" name="living-space" value="2" id="living-space-house" />
-                                <label for="living-space-house">House</label>
+                                <input type="radio" name="living-space" value="2" id="living-space-apartment" />
+                                <label for="living-space-apartment">Standard apartment — no outdoor access</label>
                             </div>
                             <div>
-                                <input type="radio" name="living-space" value="3" id="living-space-farm" />
-                                <label for="living-space-farm">Farm</label>
+                                <input type="radio" name="living-space" value="3" id="living-space-house-small" />
+                                <label for="living-space-house-small">Small house or townhouse — small yard or shared garden</label>
                             </div>
-                            <p class="text-neutral-400 italic">A large dog needs space, small dogs fit in apartments.</p>
+                            <div>
+                                <input type="radio" name="living-space" value="4" id="living-space-house" />
+                                <label for="living-space-house">House with a decent yard</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="living-space" value="5" id="living-space-farm" />
+                                <label for="living-space-farm">Farm, large property, or rural land — unlimited outdoor space</label>
+                            </div>
+                            <p class="text-neutral-400 italic">High-energy working breeds need outdoor space to stay healthy and calm.</p>
                         </div>
+
                         <!-- Activity Level -->
                         <div class="question">
                             <h1 class="font-bold">How active is your lifestyle?</h1>
                             <div>
                                 <input type="radio" name="activity-level" value="1" id="activity-sedentary" />
-                                <label for="activity-sedentary">Sedentary (mostly indoors)</label>
+                                <label for="activity-sedentary">Sedentary — short daily walks are enough for me</label>
                             </div>
                             <div>
-                                <input type="radio" name="activity-level" value="2" id="activity-moderate" />
-                                <label for="activity-moderate">Moderately active</label>
+                                <input type="radio" name="activity-level" value="2" id="activity-light" />
+                                <label for="activity-light">Light — I walk regularly but nothing intense</label>
                             </div>
                             <div>
-                                <input type="radio" name="activity-level" value="3" id="activity-active" />
-                                <label for="activity-active">Very active (outdoors often)</label>
+                                <input type="radio" name="activity-level" value="3" id="activity-moderate" />
+                                <label for="activity-moderate">Moderate — I exercise a few times a week</label>
                             </div>
-                            <p class="text-neutral-400 italic">Some dogs are more energetic and active.</p>
+                            <div>
+                                <input type="radio" name="activity-level" value="4" id="activity-active" />
+                                <label for="activity-active">Active — I exercise daily and enjoy long walks or hikes</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="activity-level" value="5" id="activity-very-active" />
+                                <label for="activity-very-active">Very active — I run, hike, or do outdoor sports regularly</label>
+                            </div>
+                            <p class="text-neutral-400 italic">A Husky or Border Collie needs 2+ hours of vigorous exercise daily.</p>
                         </div>
+
                         <!-- Grooming Time -->
                         <div class="question">
                             <h1 class="font-bold">How much time can you spend on grooming?</h1>
@@ -71,23 +89,25 @@
                             </div>
                             <p class="text-neutral-400 italic">Long-haired breeds require regular brushing.</p>
                         </div>
-                        <!-- Experience -->
+
+                        <!-- Training -->
                         <div class="question">
-                            <h1 class="font-bold">What's your experience with dogs?</h1>
+                            <h1 class="font-bold">How much training and mental stimulation are you willing to provide?</h1>
                             <div>
                                 <input type="radio" name="experience" value="1" id="experience-beginner" />
-                                <label for="experience-beginner">First-time owner</label>
+                                <label for="experience-beginner">Minimal — basic commands are enough for me</label>
                             </div>
                             <div>
                                 <input type="radio" name="experience" value="2" id="experience-intermediate" />
-                                <label for="experience-intermediate">Some experience</label>
+                                <label for="experience-intermediate">Moderate — I enjoy some training but want a balanced dog</label>
                             </div>
                             <div>
                                 <input type="radio" name="experience" value="3" id="experience-expert" />
-                                <label for="experience-expert">Experienced owner</label>
+                                <label for="experience-expert">High — I love training challenges and mentally demanding breeds</label>
                             </div>
-                            <p class="text-neutral-400 italic">Some breeds require more training knowledge.</p>
+                            <p class="text-neutral-400 italic">Highly intelligent breeds like Border Collies need constant mental challenges or they become destructive.</p>
                         </div>
+
                         <!-- Children -->
                         <div class="question">
                             <h1 class="font-bold">Do you have children or plan to?</h1>
@@ -193,6 +213,33 @@
                             </div>
                             <p class="text-neutral-400 italic">Vizslas, Border Collies, and Aussie Shepherds suffer badly when left alone for long periods.</p>
                         </div>
+
+                        <!-- Climate (new question — append after Alone Time question) -->
+                        <div class="question">
+                            <h1 class="font-bold">How would you describe the climate where you live?</h1>
+                            <div>
+                                <input type="radio" name="climate" value="1" id="climate-cold" />
+                                <label for="climate-cold">Very cold — snow and freezing winters are common</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="climate" value="2" id="climate-cool" />
+                                <label for="climate-cool">Cool to mild — cold winters, warm summers</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="climate" value="3" id="climate-temperate" />
+                                <label for="climate-temperate">Temperate — warm summers, mild winters</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="climate" value="4" id="climate-warm" />
+                                <label for="climate-warm">Warm — hot summers, rarely cold</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="climate" value="5" id="climate-hot" />
+                                <label for="climate-hot">Hot all year — tropical or desert climate</label>
+                            </div>
+                            <p class="text-neutral-400 italic">Arctic breeds like Huskies and Bernese Mountain Dogs suffer badly in tropical climates.</p>
+                        </div>
+
                         <input class="h-12 w-40 cursor-pointer rounded-sm bg-green-500 px-8 py-3 transition-colors hover:bg-green-300 active:bg-green-600" type="submit" value="Submit" />
                     </section>
                 </form>

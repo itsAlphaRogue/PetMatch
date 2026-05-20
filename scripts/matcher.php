@@ -1,10 +1,6 @@
 <?php
 
-// ---------------------------------------------------------------------------
-// Weighted Manhattan Distance — breed matcher v2
-// Added 4 new attributes: shedding_level, noise_level,
-//                         good_with_pets, alone_time_tolerance
-// ---------------------------------------------------------------------------
+// Weighted Manhattan Distance 
 
 $weights = [
     'living-space'        => 2.0,
@@ -13,21 +9,28 @@ $weights = [
     'experience'          => 2.0,
     'children'            => 2.5,
     'budget'              => 1.5,
-    // New attributes
-    'shedding'            => 2.0,   // Allergies / cleaning — matters a lot day-to-day
-    'noise'               => 2.0,   // Neighbour complaints, apartment living
-    'other-pets'          => 2.0,   // Safety — prey drive vs. resident cat/dog
-    'alone-time'          => 2.0,   // Working owners; destructive behaviour risk
+    'shedding'            => 2.0,   
+    'noise'               => 2.0,   
+    'other-pets'          => 2.0,  
+    'alone-time'          => 2.0,  
+    'climate'             => 2.5,  
 ];
 
-// ---------------------------------------------------------------------------
-// Max possible distance = sum of (weight × 2) across all attributes.
-// All attributes use a 1–3 scale, so the maximum mismatch per attribute is 2.
-// Normalising by this value keeps scores in a consistent range regardless
-// of how many attributes exist. Without this, adding attributes compresses
-// all scores toward zero.
-// ---------------------------------------------------------------------------
-$max_dist = array_sum(array_map(fn($w) => $w * 2, $weights)); // 40.0
+$max_per_attr = [
+    'living-space'   => 4,
+    'activity-level' => 4,
+    'grooming-time'  => 2,
+    'experience'     => 2,
+    'children'       => 2,
+    'budget'         => 2,
+    'shedding'       => 2,
+    'noise'          => 2,
+    'other-pets'     => 2,
+    'alone-time'     => 2,
+    'climate'        => 4,
+];
+$max_dist = 0;
+foreach ($weights as $k => $w) $max_dist += $w * $max_per_attr[$k]; // = 59.0
 
 $user_vector = [
     'living-space'        => (int)($_POST['living-space']   ?? 0),
@@ -40,6 +43,7 @@ $user_vector = [
     'noise'               => (int)($_POST['noise']          ?? 0),
     'other-pets'          => (int)($_POST['other-pets']     ?? 0),
     'alone-time'          => (int)($_POST['alone-time']     ?? 0),
+    'climate'             => (int)($_POST['climate']        ?? 0),
 ];
 
 if (in_array(0, $user_vector, true)) {
@@ -62,6 +66,7 @@ foreach ($breeds as $breed) {
         'noise'               => $breed['noise_level'],
         'other-pets'          => $breed['good_with_pets'],
         'alone-time'          => $breed['alone_time_tolerance'],
+        'climate'             => $breed['climate_tolerance'],
     ];
 
     $score    = weightedManhattan($user_vector, $breed_vector, $weights, $max_dist);
@@ -90,7 +95,7 @@ $breed4score    = $breed4['score'];
 [$label4, ,] = compatibilityLabel($breed4score);
 
 echo <<<END
-    <div class="rounded-3xl sticky top-8 bg-green-300 px-10 py-8 flex flex-col gap-4">
+    <div class="rounded-3xl sticky top-8  bg-green-300 px-10 py-8 flex flex-col gap-4">
         <p class="text-center text-lg text-green-900">Best match for you is</p>
         <h1 class="font-poppins text-center text-4xl font-bold text-green-950">$bestBreedName</h1>
         <div class="flex flex-col items-center gap-2 mt-1">
@@ -116,7 +121,7 @@ echo <<<END
             </li>
         </ul>
         <p class="text-xs text-green-800 text-center mt-2">
-            Score is based on how closely each breed matches your lifestyle across 10 factors.
+            Score is based on how closely each breed matches your lifestyle across 11 factors.
             100% means a perfect match on every factor.
         </p>
     </div>
@@ -126,10 +131,10 @@ END;
 function compatibilityLabel(string $score): array
 {
     $s = (float)$score;
-    if ($s >= 70) return ['Exceptional match', 'bg-green-600',  'text-white'];
-    if ($s >= 60) return ['Great match',        'bg-green-500',  'text-white'];
-    if ($s >= 50) return ['Good match',         'bg-green-400',  'text-green-900'];
-    if ($s >= 40) return ['Decent match',       'bg-yellow-300', 'text-yellow-900'];
+    if ($s >= 90) return ['Exceptional match', 'bg-green-600',  'text-white'];
+    if ($s >= 80) return ['Great match',        'bg-green-500',  'text-white'];
+    if ($s >= 70) return ['Good match',         'bg-green-400',  'text-green-900'];
+    if ($s >= 60) return ['Decent match',       'bg-yellow-300', 'text-yellow-900'];
     return             ['Low compatibility',   'bg-red-200',    'text-red-900'];
 }
 
