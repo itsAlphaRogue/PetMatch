@@ -27,6 +27,7 @@
             <li class="mx-8"><a href="./">Home</a></li>
             <li class="mx-8"><a href="findapet">Find a pet</a></li>
             <li class="mx-8"><a href="matcher">Breed Matcher</a></li>
+            <li class="mx-8"><a href="stories">Success Stories</a></li>
             <li class="mx-8"><a href="about">About us</a></li>
         </ul>
     </nav>
@@ -78,6 +79,7 @@
             <li class="hover:bg-white/50"><a class="block w-full py-2 pl-4" href="./">Home</a></li>
             <li class="hover:bg-white/50"><a class="block w-full py-2 pl-4" href="findapet">Find a pet</a></li>
             <li class="hover:bg-white/50"><a class="block w-full py-2 pl-4" href="matcher">Breed Matcher</a></li>
+            <li class="hover:bg-white/50"><a class="block w-full py-2 pl-4" href="stories">Success Stories</a></li>
             <li class="hover:bg-white/50"><a class="block w-full py-2 pl-4" href="about">About us</a></li>
         </ul>
 

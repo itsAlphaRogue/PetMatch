@@ -36,6 +36,10 @@ switch($route)
         require 'pages/about.html';
         break;
 
+    case 'stories':
+        require 'pages/stories.php';
+        break;
+
     case 'login':
         require 'pages/login.html';
         break;
