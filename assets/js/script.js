@@ -52,11 +52,11 @@ function loginAJAX(event)
             {
                 if (res.location === 'home') 
                 {
-                    window.location.href = "/petmatch";
+                    window.location.href = "./";
                 } 
                 else if (res.petid) 
                 {
-                    window.location.href = "/petmatch/pet?id=" + res.petid;
+                    window.location.href = "pet?id=" + res.petid;
                 }
             }
         }
@@ -98,7 +98,7 @@ function registerAJAX(event)
             submit.innerHTML = "Submit"
             if(xhr.response === "success")
             {
-                window.location.href = "/petmatch/login";
+                window.location.href = "login";
             }
             else if(xhr.response != '')
             {

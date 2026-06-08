@@ -14,7 +14,7 @@ function getPetDetailsToUpdate()
     .then(data => {
         if(data === "admindashboard")
         {
-            window.location.href = "/petmatch/admindashboard";
+            window.location.href = "admindashboard";
         }
         else
         {

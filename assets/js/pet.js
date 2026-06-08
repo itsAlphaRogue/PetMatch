@@ -60,7 +60,7 @@ function reservePet(petid)
     .then(data => {
         if(data === 'redirect')
         {
-            window.location.href = "/petmatch/login";
+            window.location.href = "login";
         }
         else
         {
