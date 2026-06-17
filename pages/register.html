@@ -6,9 +6,9 @@
 
     <body class="font-nunito flex flex-col items-center">
         <!-- below div to make everything center in xl screens -->
-        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px] min-h-screen flex flex-col">
             <?php include 'includes/navbar.php'; ?>
-            <div class="relative flex h-auto items-center justify-center">
+            <div class="relative flex flex-1 items-center justify-center">
                 <div class="card-shadow my-8 h-fit w-96 p-8">
                     <h1 class="font-poppins mb-8 text-center text-3xl font-black">Register</h1>
                     <form id="registerform" onsubmit="registerAJAX(event)">
@@ -25,6 +25,7 @@
 
                 <div id="message" class="absolute top-0 hidden rounded-md bg-red-500 px-4 py-2"></div>
             </div>
+            <?php include 'includes/footer.php'; ?>
         </div>
     </body>
 </html>

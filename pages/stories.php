@@ -6,7 +6,7 @@
     </head>
 
     <body class="font-nunito flex flex-col items-center">
-        <div class="w-full overflow-clip 2xl:max-w-[1536px] min-h-screen">
+        <div class="w-full overflow-clip 2xl:max-w-[1536px] min-h-screen flex flex-col">
             <?php include 'includes/navbar.php'; ?>
 
             <!-- Header Section -->
@@ -89,6 +89,7 @@
                     </form>
                 </div>
             </div>
+            <?php include 'includes/footer.php'; ?>
         </div>
     </body>
 </html>

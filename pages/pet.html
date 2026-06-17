@@ -7,7 +7,7 @@
 
     <body class="font-nunito flex flex-col items-center">
         <!-- below div to make everything center in xl screens -->
-        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px]">
+        <div class="w-full overflow-clip bg-neutral-100 2xl:max-w-[1536px] min-h-screen flex flex-col">
             <?php include 'includes/navbar.php'; ?>
 
             <!-- Main pet display card -->
@@ -48,6 +48,7 @@
                 </div>
             </section>
             <!-- more pets section ends -->
+            <?php include 'includes/footer.php'; ?>
         </div>
     </body>
 </html>
