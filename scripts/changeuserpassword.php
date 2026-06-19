@@ -1,19 +1,30 @@
 <?php
 
+use PetMatch\Repository\UserRepository;
+
 include "../includes/database.php";
 
 session_start();
 
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-    $currentpassword = $_POST['currentpassword'];
-    $newpassword = $_POST['newpassword'];
-    $retypepassword = $_POST['retypepassword'];
+    $currentpassword = $_POST['currentpassword'] ?? '';
+    $newpassword = $_POST['newpassword'] ?? '';
+    $retypepassword = $_POST['retypepassword'] ?? '';
 
-    $id = $_SESSION['id'];
-    $query = "SELECT `password` FROM `users` WHERE `id`='$id'";
-    $row = mysqli_fetch_assoc(mysqli_query($con, $query));
-    $dbpassword = $row['password'];
+    $id = isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0;
+    
+    $userRepo = new UserRepository();
+    $user = $userRepo->findById($id);
+
+    if (!$user) {
+        echo <<<END
+        <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">User not found</p>
+        END;
+        exit;
+    }
+
+    $dbpassword = $user->getPassword();
 
     // password validation
     if (empty($newpassword) || empty($retypepassword) || empty($currentpassword)) 
@@ -39,13 +50,16 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Passwords don't match</p>
         END;
     }
-
-    if(password_verify($currentpassword,$dbpassword))
+    elseif(!password_verify($currentpassword, $dbpassword))
     {
-        $newhashedpassword = password_hash($newpassword,PASSWORD_DEFAULT);
-
-        $query = "UPDATE `users` SET `password`='$newhashedpassword' WHERE `id`='$id'";
-        if(mysqli_query($con, $query))
+        echo <<<END
+        <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Incorrect Password</p>
+        END;
+    }
+    else 
+    {
+        $newhashedpassword = password_hash($newpassword, PASSWORD_DEFAULT);
+        if($userRepo->updatePassword($id, $newhashedpassword))
         {
             echo <<<END
             <p class="fixed right-10 bottom-14 rounded-xl bg-green-400 px-8 py-4 text-center">Password Updated</p>
@@ -57,10 +71,5 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Something went wrong</p>
             END;
         } 
-    }
-    else {
-        echo <<<END
-        <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Incorrect Password</p>
-        END;
     }
 }

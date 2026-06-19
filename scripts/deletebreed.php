@@ -1,15 +1,16 @@
 <?php
 
+use PetMatch\Repository\BreedRepository;
+
 include "../includes/database.php";
 
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-    $breedid = $_POST['id'];
+    $breedid = (int)$_POST['id'];
 
-    $query = "DELETE FROM `breeds` WHERE `id` = $breedid";
+    $breedRepo = new BreedRepository();
 
-    $result = mysqli_query($con, "SELECT `id` FROM `pets` WHERE `breed_id`='$breedid'");
-    if(mysqli_num_rows($result)>0) 
+    if($breedRepo->hasAssociatedPets($breedid)) 
     {
         echo <<<END
             <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Can't delete breed. Pet with this breed exists.</p>
@@ -17,7 +18,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     }
     else
     {
-        if(mysqli_query($con,$query))
+        if($breedRepo->delete($breedid))
         {
             echo <<<END
             

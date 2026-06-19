@@ -1,80 +1,49 @@
 <?php
 
+use PetMatch\Service\PetService;
+use PetMatch\Repository\BreedRepository;
+
 include '../includes/database.php';
 
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-
     $data = json_decode(file_get_contents("php://input"), true);
-    
-    $petid = $data['id'];
+    $petid = isset($data['id']) ? (int)$data['id'] : 0;
 
-    $query = "SELECT * FROM `pets` WHERE `id`=$petid";
+    $petService = new PetService();
+    $pet = $petService->getPetById($petid);
 
-    $result = mysqli_query($con, $query);
-    $row = mysqli_fetch_assoc($result);
-
-    if(mysqli_num_rows($result)==0)
+    if(!$pet)
     {
         echo "Pet not found";
         exit;
     }
 
-    $image = $row['image'];
-    $name = $row['name'];
-    $breedid = $row['breed_id'];
-    $age = $row['age'];
-    $gender = $row['gender'];
-    $description = $row['description'];
+    $image = $pet->getImage();
+    $name = $pet->getName();
+    $breedid = $pet->getBreedId();
+    $age = $pet->getAge();
+    $gender = $pet->getGender();
+    $description = $pet->getDescription();
 
     // FOR BREEDS
-    $breed_query = "SELECT * FROM breeds"; 
-    $breed_result = mysqli_query($con, $breed_query);
+    $breedRepo = new BreedRepository();
+    $breeds = $breedRepo->getAll();
     $breed_options = '';
 
-    // Loop through each breed from the database result
-    while ($breed_row = mysqli_fetch_assoc($breed_result)) {
-        
-        // Determine if the current breed should be selected
-        if ($breed_row['id'] == $breedid) {
-            $selected = 'selected';
-        } else {
-            $selected = '';
-        }
-        
-        // Append the option tag to the breed_options string
-        $breed_options .= "<option value='{$breed_row['id']}' {$selected}>";
-        $breed_options .= "{$breed_row['name']}";
-        $breed_options .= "</option>";
+    foreach ($breeds as $breed_row) {
+        $selected = ($breed_row['id'] == $breedid) ? 'selected' : '';
+        $breed_options .= "<option value='{$breed_row['id']}' {$selected}>{$breed_row['name']}</option>";
     }
 
     // For AGE
-    // declating variable. Was giving error when not passing empty string
-    $puppy=''; $young=''; $adult='';
-    switch($age)
-    {
-        case "Puppy":
-            $puppy = "selected";
-            break;
-        case "Young":
-            $young = "selected";
-            break;
-        case "Adult":
-            $adult = "selected";
-            break;
-    }
+    $puppy = ($age === 'Puppy') ? 'selected' : '';
+    $young = ($age === 'Young') ? 'selected' : '';
+    $adult = ($age === 'Adult') ? 'selected' : '';
 
     // For GENDER
-    $male='';$female='';
-    switch($gender)
-    {
-        case 'Male':
-            $male = 'selected';
-            break;
-        case 'Female';
-            $male = 'selected';
-            break; 
-    }
+    $male = ($gender === 'Male') ? 'selected' : '';
+    $female = ($gender === 'Female') ? 'selected' : '';
 
     echo <<<END
             <div class="gap-4 border border-black px-4 py-4">
@@ -137,7 +106,6 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
             <!-- div to display message after a pet is created -->
             <div id="messagebox" class="transition-all"></div>
-
 
             <script defer>
             function previewPetImage() {

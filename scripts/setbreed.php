@@ -1,5 +1,7 @@
 <?php
 
+use PetMatch\Repository\BreedRepository;
+
 include "../includes/database.php";
 
 if($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -7,12 +9,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $rawdata = file_get_contents("php://input");
     $breeddata = json_decode($rawdata,true);
 
-    $id = $breeddata['id'];
-    $name = $breeddata['breed'];
+    $id = (int)$breeddata['id'];
+    $name = $breeddata['breed'] ?? '';
 
-    $query = "UPDATE `breeds` SET `name`='$name' WHERE `id` = '$id'";
+    $breedRepo = new BreedRepository();
     
-    if(mysqli_query($con, $query))
+    if($breedRepo->update($id, $name))
     {
         echo <<<END
             <p class="fixed right-10 bottom-14 rounded-xl bg-green-400 px-8 py-4 text-center">Breed Updated</p>

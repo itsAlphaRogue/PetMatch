@@ -1,14 +1,19 @@
 <?php
 
+use PetMatch\Repository\UserRepository;
+use PetMatch\Domain\User;
+
 include '../includes/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password1 = $_POST['password1'];
-    $password2 = $_POST['password2'];
-    $phone = $_POST['phone'];
+    $name = $_POST['name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password1 = $_POST['password1'] ?? '';
+    $password2 = $_POST['password2'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+
+    $userRepo = new UserRepository();
 
     // Name validation
     if (empty($name)) 
@@ -33,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         echo "Please enter a valid email";
     }
-    elseif(mysqli_num_rows(mysqli_query($con,"SELECT id FROM users WHERE email='$email' LIMIT 1"))>0)
+    elseif($userRepo->findByEmail($email) !== null)
     {
         echo "Email already exists. Please use another";
     }
@@ -66,20 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         echo "Phone number must be 10 digits";
     }
-    elseif(mysqli_num_rows(mysqli_query($con,"SELECT id FROM users WHERE phone='$phone' LIMIT 1"))>0)
+    elseif($userRepo->findByPhone($phone) !== null)
     {
         echo "Phone number already exists.Please use another one";
     }
-
-
-
     else
     {
-        $hashedpassword = password_hash($password1,PASSWORD_DEFAULT);
-        mysqli_query($con,"INSERT INTO `users`(`name`, `email`, `password`, `phone`) VALUES ('$name','$email','$hashedpassword','$phone')");
+        $hashedpassword = password_hash($password1, PASSWORD_DEFAULT);
+        $user = new User(null, $name, $email, $hashedpassword, $phone, false);
+        $userRepo->save($user);
 
         echo "success";
     }
-
 }
-?>

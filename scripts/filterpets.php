@@ -1,34 +1,19 @@
 <?php
 
+use PetMatch\Service\PetService;
+
 include '../includes/database.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-    $inputage = $_POST['age'];
-    $inputgender = $_POST['gender'];
-    $inputbreed = $_POST['breed'];
-    
-    $query = "SELECT * FROM pets WHERE 1 = 1";
-    
-    
-    if(!empty($inputage))
-    {
-        $query .= " AND `age` = '$inputage'";
-    }
-    
-    if(!empty($inputgender))
-    {
-        $query .= " AND `gender` = '$inputgender'";
-    }
-    
-    if(!empty($inputbreed))
-    {
-        $query .= " AND `breed_id` = $inputbreed";
-    }    
+    $inputage = $_POST['age'] ?? null;
+    $inputgender = $_POST['gender'] ?? null;
+    $inputbreed = !empty($_POST['breed']) ? (int)$_POST['breed'] : null;
 
-    $result = mysqli_query($con, $query);
+    $petService = new PetService();
+    $pets = $petService->filterPets($inputage, $inputgender, $inputbreed);
 
-    if(mysqli_num_rows($result) == 0)
+    if(empty($pets))
     {
         echo <<<END
         <p class="flex w-full items-center justify-center py-32 text-3xl">
@@ -38,19 +23,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     }
     else
     {
-        while($row = mysqli_fetch_assoc($result))
+        foreach ($pets as $pet)
         {
-            $breed_id = $row['breed_id'];
-            $breedquery = "SELECT name FROM breeds WHERE id = $breed_id LIMIT 1";
-            $breedresult = mysqli_fetch_assoc(mysqli_query($con, $breedquery));
-
-            $id = $row['id'];
-            $name = $row['name'];
-            $image = $row['image'];
-            $breed = $breedresult['name'];
-            $age = $row['age'];
-            $gender = $row['gender'];
-
+            $id = $pet->getId();
+            $name = $pet->getName();
+            $image = $pet->getImage();
+            $breed = $pet->getBreedName();
+            $age = $pet->getAge();
+            $gender = $pet->getGender();
 
             echo <<<END
             <a href="pet?id=$id">

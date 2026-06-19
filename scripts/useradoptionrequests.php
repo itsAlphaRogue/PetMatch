@@ -1,4 +1,7 @@
 <?php
+
+use PetMatch\Service\ReservationService;
+
 include "../includes/database.php";
 
 if (session_status() === PHP_SESSION_NONE)
@@ -6,12 +9,12 @@ if (session_status() === PHP_SESSION_NONE)
     session_start();
 }
 
-$userid = $_SESSION['id'];
-$query = "SELECT * FROM `adoption_requests` WHERE `user_id` = '$userid'";
+$userid = isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0;
 
-$result = mysqli_query($con, $query);
+$reservationService = new ReservationService();
+$reservations = $reservationService->getReservationsByUserId($userid);
 
-if(mysqli_num_rows($result) == 0)
+if(empty($reservations))
 {
     echo <<<END
     <p class="flex w-full items-center justify-center py-32 text-3xl">
@@ -21,47 +24,21 @@ if(mysqli_num_rows($result) == 0)
 }
 else
 {
-    while($row = mysqli_fetch_assoc($result))
+    foreach ($reservations as $reservation)
     {
-        // Info from adoption_requests table
-        $petid = $row['pet_id'];
-        $userid = $row['user_id'];
-        $requested_at = $row['requested_at'];
-        $status = $row['status'];
-
-        // Getting pet info
-        $petquery = "SELECT * FROM pets WHERE id = $petid";
-        $pet = mysqli_fetch_assoc(mysqli_query($con, $petquery));
-
-        $image = $pet['image'];
-        $petname = $pet['name'];
-        $age = $pet['age'];
-        $gender = $pet['gender'];
-        
-        // Getting breed info
-        $breed_id = $pet['breed_id'];
-        $breedquery = "SELECT name FROM breeds WHERE id = $breed_id";
-        $breed = mysqli_fetch_assoc(mysqli_query($con, $breedquery));
-        $breed_name = $breed['name'];
-
-
-        // Getting user info
-        $userquery = "SELECT * FROM users WHERE id = $userid";
-        $user = mysqli_fetch_assoc(mysqli_query($con, $userquery));
-
-        $username = $user['name'];
-        $phone = $user['phone'];
-
-        if($status == "Approved"){
-            $color = "text-green-600";
-        }
-        elseif($status == "Pending"){
-            $color = "text-yellow-600";
-        }
-        elseif($status == "Rejected"){
-            $color = "text-red-600";
+        $pet = $reservation->getPet();
+        if (!$pet) {
+            continue;
         }
 
+        $image = $pet->getImage();
+        $petname = $pet->getName();
+        $age = $pet->getAge();
+        $gender = $pet->getGender();
+        $breed_name = $pet->getBreedName();
+        $status = $reservation->getStatus();
+        $color = $reservation->getStatusColorClass();
+        $requested_at = $reservation->getRequestedAt();
 
         echo <<<END
             <div class="m-8 w-fit">

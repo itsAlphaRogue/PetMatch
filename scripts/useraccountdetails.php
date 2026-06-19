@@ -1,26 +1,24 @@
 <?php
 
-include "../includes/database.php";
+use PetMatch\Repository\UserRepository;
 
+include "../includes/database.php";
 
 session_start();
 header('Content-Type: application/json');
 
-$id = $_SESSION['id'];
+$id = isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0;
 
-$query = "SELECT `name`,`email`,`phone` FROM `users` WHERE `id` = '$id'"; 
+$userRepo = new UserRepository();
+$user = $userRepo->findById($id);
 
-$result = mysqli_query($con, $query);
-
-$row = mysqli_fetch_assoc($result);
-$name = $row['name'];
-$email = $row['email'];
-$phone = $row['phone'];
-
-$data = [
-    'name' => $name,
-    'email' => $email,
-    'phone' => $phone
-];
+$data = [];
+if ($user) {
+    $data = [
+        'name' => $user->getName(),
+        'email' => $user->getEmail(),
+        'phone' => $user->getPhone()
+    ];
+}
 
 echo json_encode($data);

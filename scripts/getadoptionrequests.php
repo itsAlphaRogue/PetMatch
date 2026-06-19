@@ -1,12 +1,13 @@
 <?php
 
+use PetMatch\Service\ReservationService;
+
 include "../includes/database.php";
 
-$query = "SELECT * FROM `adoption_requests` WHERE `status`='Pending'";
+$reservationService = new ReservationService();
+$reservations = $reservationService->getPendingReservations();
 
-$result = mysqli_query($con, $query);
-
-if(mysqli_num_rows($result) == 0)
+if(empty($reservations))
 {
     echo <<<END
     <p class="flex w-full items-center justify-center py-32 text-3xl">
@@ -16,36 +17,25 @@ if(mysqli_num_rows($result) == 0)
 }
 else
 {
-    while($row = mysqli_fetch_assoc($result))
+    foreach ($reservations as $reservation)
     {
-        // Info from adoption_requests table
-        $petid = $row['pet_id'];
-        $userid = $row['user_id'];
-        $requested_at = $row['requested_at'];
-
-        // Getting pet info
-        $petquery = "SELECT * FROM pets WHERE id = $petid";
-        $pet = mysqli_fetch_assoc(mysqli_query($con, $petquery));
-
-        $image = $pet['image'];
-        $petname = $pet['name'];
-        $age = $pet['age'];
-        $gender = $pet['gender'];
+        $pet = $reservation->getPet();
+        $user = $reservation->getUser();
         
-        // Getting breed info
-        $breed_id = $pet['breed_id'];
-        $breedquery = "SELECT name FROM breeds WHERE id = $breed_id";
-        $breed = mysqli_fetch_assoc(mysqli_query($con, $breedquery));
-        $breed_name = $breed['name'];
+        if (!$pet || !$user) {
+            continue;
+        }
 
+        $petid = $pet->getId();
+        $image = $pet->getImage();
+        $petname = $pet->getName();
+        $age = $pet->getAge();
+        $gender = $pet->getGender();
+        $breed_name = $pet->getBreedName();
 
-        // Getting user info
-        $userquery = "SELECT * FROM users WHERE id = $userid";
-        $user = mysqli_fetch_assoc(mysqli_query($con, $userquery));
-
-        $username = $user['name'];
-        $phone = $user['phone'];
-
+        $username = $user->getName();
+        $phone = $user->getPhone();
+        $requested_at = $reservation->getRequestedAt();
 
         echo <<<END
             <div class="m-8 w-fit">

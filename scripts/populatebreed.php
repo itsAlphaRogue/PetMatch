@@ -1,13 +1,13 @@
 <?php
 
+use PetMatch\Repository\BreedRepository;
+
 include '../includes/database.php';
 
-$query = "SELECT * FROM `breeds`";
+$breedRepo = new BreedRepository();
+$breeds = $breedRepo->getAll();
 
-$result = mysqli_query($con, $query);
-
-while($row = mysqli_fetch_assoc($result))
-{
+foreach ($breeds as $row) {
     $name = $row['name'];
     $id = $row['id'];
     echo <<<END

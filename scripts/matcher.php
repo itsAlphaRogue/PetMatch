@@ -1,36 +1,8 @@
 <?php
 
-// Weighted Manhattan Distance 
+use PetMatch\Service\MatchingEngine;
 
-$weights = [
-    'living-space'        => 2.0,
-    'activity-level'      => 2.5,
-    'grooming-time'       => 1.5,
-    'experience'          => 2.0,
-    'children'            => 2.5,
-    'budget'              => 1.5,
-    'shedding'            => 2.0,   
-    'noise'               => 2.0,   
-    'other-pets'          => 2.0,  
-    'alone-time'          => 2.0,  
-    'climate'             => 2.5,  
-];
-
-$max_per_attr = [
-    'living-space'   => 4,
-    'activity-level' => 4,
-    'grooming-time'  => 2,
-    'experience'     => 2,
-    'children'       => 2,
-    'budget'         => 2,
-    'shedding'       => 2,
-    'noise'          => 2,
-    'other-pets'     => 2,
-    'alone-time'     => 2,
-    'climate'        => 4,
-];
-$max_dist = 0;
-foreach ($weights as $k => $w) $max_dist += $w * $max_per_attr[$k]; // = 59.0
+include "../includes/database.php";
 
 $user_vector = [
     'living-space'        => (int)($_POST['living-space']   ?? 0),
@@ -50,49 +22,21 @@ if (in_array(0, $user_vector, true)) {
     die('<p class="text-red-500 font-bold text-center">Please answer all questions before submitting.</p>');
 }
 
-$json   = file_get_contents("../assets/breeds.json");
-$breeds = json_decode($json, true);
+$matchingEngine = new MatchingEngine();
+$matches = $matchingEngine->findMatches($user_vector);
 
-$matches = [];
-foreach ($breeds as $breed) {
-    $breed_vector = [
-        'living-space'        => $breed['space_requirement'],
-        'activity-level'      => $breed['activity_level'],
-        'grooming-time'       => $breed['grooming_needs'],
-        'experience'          => $breed['trainability'],
-        'children'            => $breed['good_with_children'],
-        'budget'              => $breed['maintenance_cost'],
-        'shedding'            => $breed['shedding_level'],
-        'noise'               => $breed['noise_level'],
-        'other-pets'          => $breed['good_with_pets'],
-        'alone-time'          => $breed['alone_time_tolerance'],
-        'climate'             => $breed['climate_tolerance'],
-    ];
-
-    $score    = weightedManhattan($user_vector, $breed_vector, $weights, $max_dist);
-    $matches[] = ['name' => $breed['name'], 'score' => $score];
+if (empty($matches)) {
+    die('<p class="text-red-500 font-bold text-center">No breed matches found.</p>');
 }
 
-usort($matches, fn($a, $b) => $b['score'] <=> $a['score']);
+$best           = $matches[0];
+$breed2         = $matches[1] ?? null;
+$breed3         = $matches[2] ?? null;
+$breed4         = $matches[3] ?? null;
 
-$best       = $matches[0];
-$breed2     = $matches[1];
-$breed3     = $matches[2];
-$breed4     = $matches[3];
-
-$bestBreedName  = $best['name'];
-$bestBreedScore = $best['score'];
-$breed2name     = $breed2['name'];
-$breed2score    = $breed2['score'];
-$breed3name     = $breed3['name'];
-$breed3score    = $breed3['score'];
-$breed4name     = $breed4['name'];
-$breed4score    = $breed4['score'];
-
-[$bestLabel, $labelBg, $labelText] = compatibilityLabel($bestBreedScore);
-[$label2, ,] = compatibilityLabel($breed2score);
-[$label3, ,] = compatibilityLabel($breed3score);
-[$label4, ,] = compatibilityLabel($breed4score);
+$bestBreedName  = $best->getBreedName();
+$bestBreedScore = $best->getScore();
+[$bestLabel, $labelBg, $labelText] = $best->getCompatibilityLabel();
 
 echo <<<END
     <div class="rounded-3xl sticky top-8  bg-green-300 px-10 py-8 flex flex-col gap-4">
@@ -107,18 +51,24 @@ echo <<<END
         </div>
         <p class="font-poppins text-xl font-bold text-green-950 mt-4">Other suggested breeds</p>
         <ul class="flex flex-col gap-3">
+END;
+
+$suggestions = [$breed2, $breed3, $breed4];
+foreach ($suggestions as $s) {
+    if ($s) {
+        $sName = $s->getBreedName();
+        $sScore = $s->getScore();
+        [$sLabel, , ] = $s->getCompatibilityLabel();
+        echo <<<END
             <li class="flex items-center justify-between bg-green-200 rounded-xl px-4 py-2">
-                <span class="font-semibold">$breed2name</span>
-                <span class="text-sm text-green-800">$label2 &bull; $breed2score%</span>
+                <span class="font-semibold">$sName</span>
+                <span class="text-sm text-green-800">$sLabel &bull; $sScore%</span>
             </li>
-            <li class="flex items-center justify-between bg-green-200 rounded-xl px-4 py-2">
-                <span class="font-semibold">$breed3name</span>
-                <span class="text-sm text-green-800">$label3 &bull; $breed3score%</span>
-            </li>
-            <li class="flex items-center justify-between bg-green-200 rounded-xl px-4 py-2">
-                <span class="font-semibold">$breed4name</span>
-                <span class="text-sm text-green-800">$label4 &bull; $breed4score%</span>
-            </li>
+END;
+    }
+}
+
+echo <<<END
         </ul>
         <p class="text-xs text-green-800 text-center mt-2">
             Score is based on how closely each breed matches your lifestyle across 11 factors.
@@ -126,26 +76,3 @@ echo <<<END
         </p>
     </div>
 END;
-
-// ---------------------------------------------------------------------------
-function compatibilityLabel(string $score): array
-{
-    $s = (float)$score;
-    if ($s >= 90) return ['Exceptional match', 'bg-green-600',  'text-white'];
-    if ($s >= 80) return ['Great match',        'bg-green-500',  'text-white'];
-    if ($s >= 70) return ['Good match',         'bg-green-400',  'text-green-900'];
-    if ($s >= 60) return ['Decent match',       'bg-yellow-300', 'text-yellow-900'];
-    return             ['Low compatibility',   'bg-red-200',    'text-red-900'];
-}
-
-function weightedManhattan(array $user, array $breed, array $weights, float $max_dist): string
-{
-    $distance = 0.0;
-    foreach ($weights as $key => $weight) {
-        $distance += $weight * abs($user[$key] - $breed[$key]);
-    }
-    // Normalise: divide by max possible distance before inverting.
-    // This keeps scores in a stable range regardless of attribute count.
-    // Perfect match → 100%, complete mismatch → 50%.
-    return number_format((1.0 / (1.0 + $distance / $max_dist)) * 100, 2);
-}

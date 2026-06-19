@@ -1,35 +1,27 @@
 <?php
 
-// Note: this php scripts handles displaying pets in both home and findapet page.
-// In home page display only 4 pets using LIMIT
+use PetMatch\Service\PetService;
 
 include "../includes/database.php";
 
-$query = "SELECT * FROM `pets` ";
+$petService = new PetService();
 
 $data = json_decode(file_get_contents("php://input"), true);
+$limit = !empty($data['limit']) ? (int)$data['limit'] : 0;
 
-if(!empty($data))
-{
-    $limit = $data['limit'];
-    $query .= "WHERE `status`='Available' LIMIT $limit";
+if ($limit > 0) {
+    $pets = $petService->getAvailablePets($limit);
+} else {
+    $pets = $petService->getAllPets();
 }
 
-
-$result = mysqli_query($con, $query);
-
-while($row = mysqli_fetch_assoc($result))
-{
-    $id = $row['id'];
-    $image = $row['image'];
-    $name = $row['name'];
-    $age = $row['age'];
-    $gender = $row['gender'];
-    
-    $breedid =$row['breed_id'];
-    $breedquery = "SELECT `name` FROM `breeds` WHERE `id` = '$breedid'";
-    $breedresult = mysqli_fetch_assoc(mysqli_query($con, $breedquery));
-    $breed = $breedresult['name'];
+foreach ($pets as $pet) {
+    $id = $pet->getId();
+    $image = $pet->getImage();
+    $name = $pet->getName();
+    $age = $pet->getAge();
+    $gender = $pet->getGender();
+    $breed = $pet->getBreedName();
 
     echo <<<END
     <a href="pet?id=$id">

@@ -1,21 +1,17 @@
 <?php
 
+use PetMatch\Repository\BreedRepository;
+
 include "../includes/database.php";
 
 if($_SERVER["REQUEST_METHOD"] == 'POST')
 {
+    $inputbreedname = $_POST['breedname'] ?? '';
+    
+    $breedRepo = new BreedRepository();
+    $breeds = $breedRepo->search($inputbreedname);
 
-    $inputbreedname = $_POST['breedname'];
-    $query = "SELECT * FROM `breeds`";
-
-    if($inputbreedname != '')
-    {
-        $query .= " WHERE `name` LIKE '%$inputbreedname%'";
-    }
-
-    $result = mysqli_query($con, $query);
-
-    if(!empty(mysqli_num_rows($result)))
+    if(!empty($breeds))
     {
         echo <<<END
             <table class="w-full border-neutral-400">
@@ -24,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] == 'POST')
                     <th class="border-b border-neutral-400">Actions</th>
                 </tr>
         END;
-        while($row = mysqli_fetch_assoc($result))
+        foreach($breeds as $row)
         {
             $name = $row['name'];
             $id = $row['id'];

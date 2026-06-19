@@ -1,15 +1,15 @@
 <?php
 
+use PetMatch\Service\PetService;
+
 include "../includes/database.php";
 $data = json_decode(file_get_contents("php://input"), true);
 
+$petid = isset($data['id']) ? (int)$data['id'] : 0;
+$petService = new PetService();
+$pet = $petService->getPetById($petid);
 
-$petid = $data['id'] ?? null;
-$query = "SELECT * FROM `pets` WHERE `id` = $petid";
-
-$petresult = mysqli_query($con, $query);
-$row = mysqli_fetch_assoc($petresult);
-if(mysqli_num_rows($petresult) == 0)
+if(!$pet)
 {
     echo <<<END
         <div class="w-full flex justify-center items-center">
@@ -19,49 +19,15 @@ if(mysqli_num_rows($petresult) == 0)
     exit;
 }
 
-$breed_id = $row['breed_id'];
-$breedquery = "SELECT name FROM breeds WHERE id = $breed_id LIMIT 1";
-$breedresult = mysqli_fetch_assoc(mysqli_query($con, $breedquery));
-
-
-$image = $row['image'];
-$breed = $breedresult['name'];
-$name = $row['name'];
-$age = $row['age'];
-$gender = $row['gender'];
-$description = $row['description'];
-
-// status in database and status to display are different so we need to do this
-if($row['status'] == "Available")
-{
-    $status = "Available for adoption";
-}
-elseif($row['status'] == "Reserved")
-{
-    $status = "Currently reserved";
-}
-else
-{
-    $status = "Adopted";
-}
-
-// for changing status bg color and text color. 
-// checking status and adding color class accordingly.
-if($status == "Available for adoption")
-{
-    $colors = "bg-green-400/80 text-green-900";
-    $reserve = "bg-green-400 hover:bg-green-300 active:bg-green-600 cursor-pointer";
-}
-elseif($status == "Currently reserved")
-{
-    $colors = "bg-yellow-400/30 text-yellow-600";
-    $reserve = "bg-neutral-400 cursor-not-allowed pointer-events-none";
-}
-else
-{
-    $colors = "bg-red-400/30 text-red-600";
-    $reserve = "bg-neutral-400 cursor-not-allowed pointer-events-none";
-}
+$image = $pet->getImage();
+$breed = $pet->getBreedName();
+$name = $pet->getName();
+$age = $pet->getAge();
+$gender = $pet->getGender();
+$description = $pet->getDescription();
+$status = $pet->getDisplayStatus();
+$colors = $pet->getStatusColors();
+$reserve = $pet->getReserveButtonClass();
 
 echo <<<END
     <div class="m-4 overflow-hidden rounded-lg lg:relative lg:m-0 lg:flex-[1] lg:rounded-none">
@@ -76,7 +42,7 @@ echo <<<END
             <p class="text-justify">$description</p>
         </div>
 
-        <div class="flex w-fit items-center justify-center rounded-3xl $colors px-3 py-1 text-green-900">
+        <div class="flex w-fit items-center justify-center rounded-3xl $colors px-3 py-1">
             <p class="mr-1 text-2xl">●</p>
             <p class="font-semibold">$status</p>
         </div>

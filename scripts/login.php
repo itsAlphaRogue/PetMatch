@@ -1,5 +1,7 @@
 <?php
 
+use PetMatch\Repository\UserRepository;
+
 include '../includes/database.php';
 header('Content-Type: application/json');
 
@@ -7,31 +9,30 @@ $response = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    $result = mysqli_query($con, "SELECT `id`, `name`, `password` FROM users WHERE email = '$email'");
-    $row = mysqli_fetch_assoc($result);
+    $userRepo = new UserRepository();
+    $user = $userRepo->findByEmail($email);
 
-    if (mysqli_num_rows($result) == 0) 
+    if (!$user) 
     {
         $response['status'] = 'error';
         $response['message'] = 'Incorrect email or password';
     } else 
     {
-        $hashedpassword = $row['password'];
-        if (password_verify($password, $hashedpassword)) 
+        if (password_verify($password, $user->getPassword())) 
         {
             session_start();
             unset($_SESSION['admin']);
-            $_SESSION['user'] = $row['name'];
-            $_SESSION['id'] = $row['id'];
+            $_SESSION['user'] = $user->getName();
+            $_SESSION['id'] = $user->getId();
 
             if (isset($_SESSION['redirect_petid'])) 
             {
                 $response['status'] = 'redirect';
                 $response['petid'] = $_SESSION['redirect_petid'];
-                unset($_SESSION['redirect_petid']); // Optional: clean up
+                unset($_SESSION['redirect_petid']);
             } 
             else 
             {

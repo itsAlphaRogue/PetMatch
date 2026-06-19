@@ -1,90 +1,38 @@
 <?php
 
-    include '../includes/database.php';
+use PetMatch\Service\PetService;
 
-    $inputname = $_POST['name'];
-    $inputbreed = $_POST['breed'];
-    $inputage = $_POST['age'];
-    $inputstatus = $_POST['status'];
-    $inputgender = $_POST['gender'];
+include '../includes/database.php';
 
-    $query = "SELECT * FROM pets WHERE 1 = 1";
+$inputname = $_POST['name'] ?? null;
+$inputbreed = !empty($_POST['breed']) ? (int)$_POST['breed'] : null;
+$inputage = $_POST['age'] ?? null;
+$inputstatus = $_POST['status'] ?? null;
+$inputgender = $_POST['gender'] ?? null;
 
-    if(!empty($inputname))
+$petService = new PetService();
+$pets = $petService->searchPets($inputname, $inputbreed, $inputstatus, $inputage, $inputgender);
+
+if(empty($pets))
+{
+    echo <<<END
+    <p class="flex w-full items-center justify-center py-32 text-3xl">
+        No pets found. Try different keywords.
+    </p>
+    END;
+}
+else
+{
+    foreach ($pets as $pet)
     {
-        $query .= " AND `name` LIKE '%$inputname%'";
-    }
-
-    if(!empty($inputbreed))
-    {
-        $query .= " AND `breed_id` = $inputbreed";
-    }
-
-    if(!empty($inputage))
-    {
-        $query .= " AND `age` = '$inputage'";
-    }
-
-    if(!empty($inputstatus))
-    {
-        $query .= " AND `status` = '$inputstatus'";
-    }
-
-    if(!empty($inputgender))
-    {
-        $query .= " AND `gender` = '$inputgender'";
-    }
-
-    $result = mysqli_query($con, $query);
-
-    if(mysqli_num_rows($result) == 0)
-    {
-        echo <<<END
-        <p class="flex w-full items-center justify-center py-32 text-3xl">
-            No pets found. Try different keywords.
-        </p>
-        END;
-    }
-    while($row = mysqli_fetch_assoc($result))
-    {
-        $breed_id = $row['breed_id'];
-        $breedquery = "SELECT name FROM breeds WHERE id = $breed_id LIMIT 1";
-        $breedresult = mysqli_fetch_assoc(mysqli_query($con, $breedquery));
-
-        $petid = $row['id'];
-        $name = $row['name'];
-        $image = $row['image'];
-        $breed = $breedresult['name'];
-        $age = $row['age'];
-        $gender = $row['gender'];
-        if($row['status'] == "Available")
-        {
-            $status = "Available for adoption";
-        }
-        elseif($row['status'] == "Reserved")
-        {
-            $status = "Currently reserved";
-        }
-        else
-        {
-            $status = "Adopted";
-        }
-
-        // for changing status bg color and text color. 
-        // checking status and adding color class accordingly.
-        if($status == "Available for adoption")
-        {
-            $colors = "bg-green-400/80 text-green-900";
-        }
-        elseif($status == "Currently reserved")
-        {
-            $colors = "bg-yellow-400/30 text-yellow-600";
-        }
-        else
-        {
-            $colors = "bg-red-400/30 text-red-600";
-        }
-
+        $petid = $pet->getId();
+        $name = $pet->getName();
+        $image = $pet->getImage();
+        $breed = $pet->getBreedName();
+        $age = $pet->getAge();
+        $gender = $pet->getGender();
+        $status = $pet->getDisplayStatus();
+        $colors = $pet->getStatusColors();
 
         echo <<<END
         <div class="flex items-center gap-2">
@@ -117,6 +65,5 @@
             </div>
         </div>
         END;
-
-
     }
+}

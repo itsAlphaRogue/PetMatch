@@ -1,28 +1,35 @@
 <?php
 
+use PetMatch\Repository\UserRepository;
+
 include "../includes/database.php";
 
 session_start();
 
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-    // From user input
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $id = $_SESSION['id'];
+    $name = $_POST['name'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $id = isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0;
 
-    $selectquery = "SELECT * FROM users WHERE id = '$id'";
-    $dbuser = mysqli_fetch_assoc(mysqli_query($con, $selectquery));
+    $userRepo = new UserRepository();
+    $dbuser = $userRepo->findById($id);
 
-    // From database
-    $dbname = $dbuser['name'];
-    $dbemail = $dbuser['email'];
-    $dbphone = $dbuser['phone'];
+    if (!$dbuser) {
+        echo <<<END
+        <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">User not found</p>
+        END;
+        exit;
+    }
+
+    $dbname = $dbuser->getName();
+    $dbemail = $dbuser->getEmail();
+    $dbphone = $dbuser->getPhone();
 
     if($name != $dbname)
     {
-         if (empty($name)) 
+        if (empty($name)) 
         {
             echo <<<END
                 <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Name cannot be empty</p>
@@ -42,11 +49,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         }
         else
         {
-            $query = "UPDATE `users` SET `name`='$name' WHERE `id` = '$id'";
-
-            $result = mysqli_query($con, $query);
-            if($result)
+            if($userRepo->updateDetails($id, $name, $dbemail, $dbphone))
             {
+                $dbname = $name;
                 echo <<<END
                 <p class="fixed right-10 bottom-14 rounded-xl bg-green-400 px-8 py-4 text-center">Name updated</p>
                 END;
@@ -74,7 +79,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Please enter a valid email</p>
             END;
         }
-        elseif(mysqli_num_rows(mysqli_query($con,"SELECT id FROM users WHERE email='$email' LIMIT 1"))>0)
+        elseif($userRepo->findByEmail($email) !== null)
         {
             echo <<<END
             <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Email already exists. Please use another</p>
@@ -82,11 +87,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         }
         else
         {
-            $query = "UPDATE `users` SET `email`='$email' WHERE `id` = '$id'";
-
-            $result = mysqli_query($con, $query);
-            if($result)
+            if($userRepo->updateDetails($id, $dbname, $email, $dbphone))
             {
+                $dbemail = $email;
                 echo <<<END
                 <p class="fixed right-10 bottom-14 rounded-xl bg-green-400 px-8 py-4 text-center">Email updated</p>
                 END;
@@ -114,7 +117,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Phone number must be 10 digits</p>
             END;
         }
-        elseif(mysqli_num_rows(mysqli_query($con,"SELECT id FROM users WHERE phone='$phone' LIMIT 1"))>0)
+        elseif($userRepo->findByPhone($phone) !== null)
         {
             echo <<<END
             <p class="fixed right-10 bottom-14 rounded-xl bg-red-400 px-8 py-4 text-center">Phone number already exists.Please use another one</p>
@@ -122,11 +125,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         }
         else
         {
-            $query = "UPDATE `users` SET `phone`='$phone' WHERE `id` = '$id'";
-
-            $result = mysqli_query($con, $query);
-            if($result)
+            if($userRepo->updateDetails($id, $dbname, $dbemail, $phone))
             {
+                $dbphone = $phone;
                 echo <<<END
                 <p class="fixed right-10 bottom-14 rounded-xl bg-green-400 px-8 py-4 text-center">Phone no updated</p>
                 END;
@@ -140,11 +141,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         }
     }
 
-
-    if ($name == $dbname && $email == $dbemail && $phone == $dbphone) {
+    if ($name == $dbuser->getName() && $email == $dbuser->getEmail() && $phone == $dbuser->getPhone()) {
         echo <<<END
         <p class="fixed right-10 bottom-14 rounded-xl bg-yellow-300 px-8 py-4 text-center">No changes detected</p>
         END;
     }
 }
-
