@@ -1,8 +1,8 @@
 <?php
 
 $hostname = "localhost";
-$username = "root";
-$password = "itsme";
+$username = "admin";
+$password = "admin";
 $db = "petmatch";
 
-$con = mysqli_connect("localhost","root",$password,$db);
+$con = mysqli_connect($hostname, $username, $password, $db);

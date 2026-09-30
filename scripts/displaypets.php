@@ -5,14 +5,14 @@
 
 include "../includes/database.php";
 
-$query = "SELECT * FROM `pets` ";
+$query = "SELECT * FROM `pets` WHERE `status`='Available' OR `status`='Reserved'  ";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
 if(!empty($data))
 {
     $limit = $data['limit'];
-    $query .= "WHERE `status`='Available' LIMIT $limit";
+    $query .= "LIMIT $limit";
 }
 
 

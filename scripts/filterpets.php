@@ -8,7 +8,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     $inputgender = $_POST['gender'];
     $inputbreed = $_POST['breed'];
     
-    $query = "SELECT * FROM pets WHERE 1 = 1";
+    $query = "SELECT * FROM pets WHERE `status` = 'Available'";
     
     
     if(!empty($inputage))

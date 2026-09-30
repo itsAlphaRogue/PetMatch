@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         echo "Name must be 3 or more characters";
     } 
-    elseif (!ctype_alnum($name)) 
+    elseif (!preg_match('/^[a-zA-Z ]+$/', $name))
     {
         echo "Name must not contain special characters";
     }

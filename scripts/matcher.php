@@ -4,13 +4,13 @@
 
 $weights = [
     'living-space'        => 2.0,
-    'activity-level'      => 2.5,
+'activity-level'         => 2.5,
     'grooming-time'       => 1.5,
     'experience'          => 2.0,
     'children'            => 2.5,
     'budget'              => 1.5,
-    'shedding'            => 2.0,   
-    'noise'               => 2.0,   
+    'shedding'            => 2.0,
+    'noise'               => 2.0,
     'other-pets'          => 2.0,  
     'alone-time'          => 2.0,  
     'climate'             => 2.5,  
@@ -30,7 +30,7 @@ $max_per_attr = [
     'climate'        => 4,
 ];
 $max_dist = 0;
-foreach ($weights as $k => $w) $max_dist += $w * $max_per_attr[$k]; // = 59.0
+foreach ($weights as $k => $w) $max_dist += $w * $max_per_attr[$k];
 
 $user_vector = [
     'living-space'        => (int)($_POST['living-space']   ?? 0),

@@ -1,25 +1,6 @@
 <?php
 
-// Trending Score algorithm
-// -------------------------
-// Ranks available pets by a time-decayed popularity score.
-//
-// Formula:
-//   trending_score = (views * 1.0 + reservations * 3.0)
-//                    / (hours_since_added + 2) ^ 1.5
-//
-// - views        = rows in pet_views for this pet (last 30 days)
-// - reservations = rows in adoption_requests for this pet (any status)
-// - hours_since_added = how old the first view of this pet is in hours
-//                       (falls back to 0 if never viewed — still gets shown)
-// - gravity (1.5) = how fast old interactions decay vs new ones
-//
-// Reservations are worth 3× a view because they signal strong intent.
-// The +2 in the denominator prevents division-by-zero for brand-new pets
-// and gives them a fair initial boost.
-//
-// Returns: top 4 trending Available pets as HTML cards,
-//          matching the exact card markup used by displaypets.php.
+// Trending Score algorithm -> Popularity-Weighted Recency Score
 
 include "../includes/database.php";
 
@@ -47,7 +28,7 @@ $sql = "
           AND pv.viewed_at >= NOW() - INTERVAL 30 DAY
     LEFT JOIN `adoption_requests` ar
            ON ar.pet_id = p.id
-    WHERE p.status = 'Available'
+    WHERE p.status = 'Available' OR p.status = 'Reserved'
     GROUP BY p.id
 ";
 
@@ -58,15 +39,14 @@ while ($row = mysqli_fetch_assoc($result)) {
     $views        = (int)$row['view_count'];
     $reservations = (int)$row['reservation_count'];
 
-    // Hours since first view; brand-new pets (never viewed) get 0
+    // Hours since first view; brand-new pets get 0
     if ($row['first_viewed_at']) {
         $hours = max(0, (time() - strtotime($row['first_viewed_at'])) / 3600);
     } else {
         $hours = 0;
     }
 
-    $score = ($views * $view_w + $reservations * $reserve_w)
-             / pow($hours + 2, $gravity);
+    $score = ($views * $view_w + $reservations * $reserve_w) / pow($hours + 2, $gravity);
 
     $pets[] = array_merge($row, ['trending_score' => $score]);
 }
@@ -75,7 +55,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 usort($pets, fn($a, $b) => $b['trending_score'] <=> $a['trending_score']);
 $pets = array_slice($pets, 0, $top_n);
 
-// Render — identical card markup to displaypets.php
+
 foreach ($pets as $row) {
     $id     = $row['id'];
     $image  = $row['image'];

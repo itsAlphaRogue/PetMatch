@@ -39,7 +39,7 @@ function previewImage(event)
         const reader = new FileReader();
         reader.onload = function(e)
         {
-            let previewBox = document.getElementById("preview-box");
+            let previewBox = document.getElementById("previewbox");
             previewBox.style.backgroundImage = `url(${e.target.result})`;
             previewBox.innerHTML = '';
         }
@@ -223,7 +223,7 @@ function setAdoptionRequestStatus(option,adoptionrequestsid)
         headers:{
             'Content-Type':'application/json'
         },
-        body: JSON.stringify({option:option,id:petid})
+        body: JSON.stringify({option:option,id:adoptionrequestsid})
     })
     .then(Response=>Response.text())
     .then(data => {
